@@ -1,1 +1,0 @@
-select current_date as today, current_time as now, current_timestamp as timestamp;
