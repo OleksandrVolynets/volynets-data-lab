@@ -47,6 +47,7 @@ SELECT
     (SELECT COUNT(*) FROM hotels)    AS hotels_cnt,
     (SELECT COUNT(*) FROM customers) AS customers_cnt,
     (SELECT COUNT(*) FROM bookings)  AS bookings_cnt;
+
 BEGIN;
 DELETE FROM hotels WHERE id = 1;
 SELECT COUNT(*) AS bookings_after_delete FROM bookings;
