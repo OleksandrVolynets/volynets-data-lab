@@ -1,0 +1,20 @@
+''' для PowerShell - в мене запустилось так'''
+
+docker run -d --name pg-hotels `
+>>   -e POSTGRES_USER=<login> `
+>>   -e POSTGRES_PASSWORD=<password> `
+>>   -e POSTGRES_DB=hotel_booking `
+>>   -p 5432:5432 `
+>>   postgres:16
+
+
+----------------------------------------------------------------------------------
+''' Linux/macOS (bash) - не перевіряв, але пишуть, що саме в цих системах "\" - означає перенесення рядків'''
+
+docker run -d --name pg-hotels \
+>>   -e POSTGRES_USER=<login> \
+>>   -e POSTGRES_PASSWORD=<password> \
+>>   -e POSTGRES_DB=hotel_booking \
+>>   -p 5432:5432 \
+>>   postgres:16
+
