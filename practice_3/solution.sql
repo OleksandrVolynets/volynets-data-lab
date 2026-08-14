@@ -17,7 +17,7 @@ select
 	last_name,
 	salary
 from employees
-where salary < 4_000
+where salary < 4000
 order by salary asc;
 
 -- Завдання 2.3
@@ -67,7 +67,7 @@ select
 	salary, 
 	commission_pct
 from employees
-where salary > 6_000 and commission_pct = 0.15
+where salary > 6000 and commission_pct = 0.15
 order by salary desc;
 
 -- Завдання 2.8
@@ -108,7 +108,7 @@ select
 	last_name, 
 	salary
 from employees
-where salary > 4_000
+where salary > 4000
 order by employee_id asc 
 limit 5;
 
@@ -178,7 +178,7 @@ select
 	sum(salary) as total_salary
 from employees
 group by department_id
-having sum(salary) > 10_000
+having sum(salary) > 10000
 order by total_salary desc;
 
 -- Завдання 3.5
@@ -186,7 +186,7 @@ select
 	employee_id, 
 	first_name, 
 	last_name,
-	coalesce(commission_pct, 0) as commission_pct
+	coalesce(commission_pct, 0) as commission
 from employees
 order by employee_id asc;
 
@@ -198,7 +198,7 @@ select
 from employees
 group by employee_id, 
 	last_name
-having salary + salary * COALESCE(commission_pct, 0) > 5_000
+having salary + salary * COALESCE(commission_pct, 0) > 5000
 order by total_income desc;
 
 -- Завдання 4.1
@@ -220,7 +220,7 @@ select
 from employees as e 
 join jobs as j 
 	on e.job_id = j.job_id 
-where e.salary > 5_000
+where e.salary > 5000
 order by e.salary desc;
 
 -- Завдання 4.3
@@ -263,7 +263,7 @@ select
 from employees as e
 join jobs as j 
 	on e.job_id = j.job_id 
-full outer join departments as d 
+join departments as d 
 	on d.department_id = e.department_id 
 order by d.department_name,
 	e.last_name asc;
@@ -338,7 +338,7 @@ where d.department_id in (
 		e.department_id
 	from employees as e 
 	group by e.department_id
-	having sum(salary) > 100_000
+	having sum(salary) > 100000
 	)
 order by department_id asc;
 
@@ -389,6 +389,6 @@ where exists (
 	from employees as e1 
 	where e.department_id = e1.department_id
 	group by e1.department_id
-	having avg(e1.salary) > 15_000)
+	having avg(e1.salary) > 15000)
 group by e.department_id
 order by department_id asc;
