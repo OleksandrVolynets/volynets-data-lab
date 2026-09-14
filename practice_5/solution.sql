@@ -90,7 +90,7 @@ select
 	sale_id,
 	store_id,
 	total_amount,
-	dense_rank() over (order by total_amount desc) as overall_rank
+	rank() over (order by total_amount desc) as overall_rank
 from sales
 order by overall_rank;
 
@@ -354,7 +354,7 @@ select
 	price_date,
 	closing_price,
 	closing_price - lag(closing_price) over (partition by stock_symbol order by price_date) as price_delta,
-	round((closing_price - lag(closing_price) over (partition by stock_symbol order by price_date))/closing_price * 100, 2) as pct_change 
+	round((closing_price - lag(closing_price) over (partition by stock_symbol order by price_date))/lag(closing_price) over (partition by stock_symbol order by price_date) * 100, 2) as pct_change 
 from stock_prices;
 
 -- Завдання 7.4.
@@ -364,7 +364,7 @@ select
 	price_date,
 	closing_price,
 	first_value(closing_price) over (partition by stock_symbol order by price_date) as first_price,
-	round((closing_price - first_value(closing_price) over (partition by stock_symbol order by price_date))/closing_price * 100, 2) as growth_from_start_pct 
+	round((closing_price - first_value(closing_price) over (partition by stock_symbol order by price_date))/first_value(closing_price) over (partition by stock_symbol order by price_date) * 100, 2) as growth_from_start_pct 
 from stock_prices;
 
 -- Завдання 7.5.
@@ -374,7 +374,7 @@ select
 	price_date,
 	closing_price,
 	max(closing_price) over (partition by stock_symbol) as max_price,
-	closing_price - max(closing_price) over (partition by stock_symbol) as diff_from_max 
+	max(closing_price) over (partition by stock_symbol) - closing_price as diff_from_max 
 from stock_prices;
 
 -- Завдання 7.6.
@@ -398,10 +398,28 @@ select
            OVER (PARTITION BY stock_symbol ORDER BY price_date) as cumulative_change 
 from cte_final;
 
+-- Завдання 7.7. 
+select 
+	stock_id,
+	stock_symbol,
+	price_date,
+	closing_price,
+	case
+    	when closing_price > lag(closing_price, 1) over (partition by stock_symbol order by price_date)
+        and lag(closing_price, 1) over (partition by stock_symbol order by price_date) > lag(closing_price, 2) over (partition by stock_symbol order by price_date)
+        then 'так'
+        else 'ні'
+    end as three_day_growth
+from stock_prices;
+
 -- Завдання 8.1.
-SELECT *
+SELECT 
+	store_id, 
+	sale_id, 
+	sale_date, 
+	total_amount
 FROM (
-    SELECT sale_id, store_id, total_amount,
+    SELECT sale_id, store_id, sale_date, total_amount,
            ROW_NUMBER() OVER (PARTITION BY store_id
                               ORDER BY total_amount DESC, sale_id) AS rn
     FROM sales
