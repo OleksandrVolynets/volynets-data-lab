@@ -430,11 +430,11 @@ WHERE rn = 1;
 select distinct
 	store_id, 
 	first_value(sale_date) over (partition by store_id order by sale_date) as first_sale_date,
-	first_value(sale_date) over (partition by store_id order by sale_date desc) as last_sale_date, 
-	first_value(sale_date) over (partition by store_id order by sale_date desc) - first_value(sale_date) over (partition by store_id order by sale_date) as days_between
+	last_value(sale_date) over (partition by store_id order by sale_date rows between unbounded preceding and unbounded following) as last_sale_date2,
+	last_value(sale_date) over (partition by store_id order by sale_date rows between unbounded preceding and unbounded following) - first_value(sale_date) over (partition by store_id order by sale_date) as days_between
 from sales;
 
--- Завдання 8.2.
+-- Завдання 8.3.
 select 
 	product_id, 
 	sum(total_amount) as product_total, 
