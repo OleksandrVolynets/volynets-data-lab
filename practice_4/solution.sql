@@ -161,7 +161,7 @@ select
 	name, 
 	coalesce(discount, 0) as discount,
 	case when coalesce(discount, 0) < 0.07 then 'Мінімальна' 
-		when coalesce(discount, 0) < 0.12 then 'Середня'
+		when coalesce(discount, 0) <= 0.12 then 'Середня'
 		else 'Висока' end as discount_level
 from products
 order by id;
@@ -324,7 +324,7 @@ select
 	 event_name, 
 	 registration_deadline, 
 	 start_date, 
-	 registration_deadline - start_date as days_before_start
+	 EXTRACT(DAY FROM (registration_deadline - start_date)) as days_before_start
 from events 
 where registration_deadline - start_date > interval '-7 days'
 order by id;
@@ -416,7 +416,7 @@ select
             and address is null
             then 1
         end
-    ) as with_nothingwith_nothing
+    ) as with_nothing
 from customer_data;
 
 -- Завдання 7.1. 
